@@ -836,6 +836,26 @@ List of favorites files and folders.
 
 + Response 204
 
+#Shared [/shared]
+
+List of shared files and folders.
+
+## Retrieve shared files or folders [GET]
+
++ Response 200 (application/json)
+    
+        [
+            {
+                "id": 1,
+                "name": "Documentos",
+                "size": 1239021,
+                "modified": 1380605239911,
+                "created": 1388085893392,
+                "type": "application/vnd.fenixedu.docs.folder"
+            }
+        ]
+
++ Response 401
 
 ## Events [/events/{id}{?start}{?end}]
 

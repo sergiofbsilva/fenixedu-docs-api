@@ -243,7 +243,6 @@ Returns the current metadata of the file **id**
 
 + Response 401
 
-
 ## Share File [/file/{id}/share]
 
 Shares a file with one or more groups.
@@ -312,6 +311,10 @@ Each attribute defines the access group with the following attributes:
 + Response 200
     [Share File][]
 
++ Response 404
+
++ Response 401
+
 ## POST
 
 + Request (application/json)
@@ -376,7 +379,9 @@ Each attribute defines the access group with the following attributes:
             }
         }
 
-+ Response 403
++ Response 404
+
++ Response 401
 
 # User Root Directory [/directory]
 

@@ -1,0 +1,812 @@
+FORMAT: 1A
+HOST: https://docs.tecnico.ulisboa.pt
+
+# docs
+Docs API is a *file management* service similar to Dropbox, Google Drive, etc ...
+
+#File [/file/{id}]
+
+Get file basic details.
+
++ Parameters
+    + id (string) ... Unique identifier of the file
+    
++ Model (application/json)
+    JSON representation of a file basic details.
+    
+    + Body
+    
+            {
+                "id": 3,
+                "name": "fatura.pdf",
+                "privacy": "custom",
+                "size": 1232121,
+                "modified": 1403231792000,
+                "created": 1403211792000,
+                "type": "application/pdf"
+            }
+
+## File Basic Details [GET]
+
++ Response 200
+
+    [File][]
+
+## Rename [PUT]
+
++ Request (application/json)
+
+        {
+            "name": "fatura2.pdf"
+        }
+
++ Response 200 (application/json)
+    
+        {
+            "id": 3,
+            "name": "fatura.pdf",
+            "privacy": "custom",
+            "size": 1232121,
+            "modified": 1403231792000,
+            "created": 1403211792000,
+            "type": "application/pdf"
+        }
+
+## File Extended Details [/files/{id}/details]
+
+Get file extended details.
+
++ Parameters
+    + id (string) ... Unique identifier of the file
+    
++ Model (application/json)
+    JSON representation of a file extended details.
+    
+    + Body
+    
+            {
+                "id": 2,
+                "name": "fatura.pdf",
+                "privacy": "shared",
+                "parent": { 
+                            "id" : 1,
+                            "name":"Utilizador 1 (user1)"
+                          },
+                "typology": "Invoice",
+                "sharing": {
+                    "read": {
+                        "expression": "U(username1)",
+                        "name": "username1",
+                        "accessible": true
+                    },
+                    "write": {
+                        "expression": "U(username1) | U(username2)",
+                        "name": "username1, username2",
+                        "accessible": true
+                    }
+                },
+                "size": 1232121,
+                "modified": 1403231792000,
+                "created": 1403211792000,
+                "type": "application/pdf",
+                "metadata": {
+                    "Provider": "FNAC Portugal",
+                    "Invoice Number": 12312,
+                    "Date": "01/05/2014"
+                }
+            }
+
+## GET
+
++ Response 200
+
+    [File Extended Details][]
+
+
+## Move [/file/{id}/move]
++ Parameters
+    + id (string) ... Unique identifier of the file to be moved.
+
+## POST
+    **id** must be a folder.
+
++ Request (application/json)
+    
+
+        {
+            "id" : 3
+        }
+
++ Response 401
+
++ Response 404
+
++ Response 200
+
+    [File Extended Details][]
+
+## Metadata [/file/{id}/metadata]
+
++ Parameters
+    + id (string) ... Unique identifier of the file
+
++ Model (application/json)
+
+    + Body
+    
+            {
+                "Provider": "FNAC Portugal",
+                "Invoice Number" : 12312,
+                "Date" : "01/05/2014"
+            }
+
+## GET
+Retrieves metadata of the file identified by the **id**
+
++ Response 200 (application/json)
+
+    [Metadata][]
+
++ Response 401
+
+## POST
+Adds or changes metadata values
+
++ Request
+    [Metadata][]
+
++ Response 200 (application/json)
+    [Metadata][]
+
++ Response 401
+
+## PUT
+Adds or changes metadata values
+
++ Request
+    [Metadata][]
+
++ Response 200 (application/json)
+    [Metadata][]
+
++ Response 401
+
+## DELETE
+Remove the following values of the metadata
+Returns the current metadata of the file **id**
+
++ Request (application/json)
+        
+        [ "Provider", "Date"]
+
++ Response 200 (application/json)
+
+    [Metadata][]
+
+## Share File [/file/{id}/share]
+
+Shares a file with one or more groups.
+
+The Share resource has the following attributes:
+
+- read
+- write
+
+Each attribute defines the access group with the following attributes:
+
+- type  Group type. Possible values `custom` or `user`
+- expression - Group expression. Possible values are  `anyone` or `logged` or `U(user1,user2,user3)`
+- name - presentation name of the group
+- links - list of users that have links to the file `id`.
+
++ Parameters
+    + id (string) ...  unique id of the file or folder to be shared
+
++ Model (application/json)
+    
+    This model is the JSON representation of the sharing settings for
+
+    + Body
+    
+            {
+                "target" : {
+                        "id": 3,
+                        "name": "fatura.pdf",
+                        "privacy": "custom",
+                        "size": 1232121,
+                        "modified": 1403231792000,
+                        "created": 1403211792000,
+                        "type": "application/pdf"
+               },
+                "read": {
+                    "type": "custom",
+                    "expression": "logged",
+                    "name": "Utilizadores autenticados",
+                    "links": [
+                        {
+                            "username": "user1",
+                            "name": "Utilizador 1"
+                        }
+                    ]
+                },
+                "write": {
+                    "type": "user",
+                    "expression": "U(user2,user3)",
+                    "name": "user2, user3",
+                    "links": [
+                        {
+                            "username": "user2",
+                            "name": "Utilizador 2"
+                        },
+                        {
+                            "username": "user3",
+                            "name": "Utilizador 3"
+                        }
+                    ]
+                }
+            }
+
+## GET
+    
++ Response 200
+    [Share File][]
+
+## POST
+
++ Request (application/json)
+
+        {
+            "read": {
+                "type": "custom",
+                "expression": "logged",
+                "name": "Utilizadores autenticados",
+                "links": [
+                    {
+                        "username": "user1",
+                        "name": "Utilizador 1"
+                    }
+                ]
+            },
+            "write": {
+                "type": "user",
+                "expression": "U(user2,user3)",
+                "name": "user2, user3",
+                "links": [
+                    {
+                        "username": "user2",
+                        "name": "Utilizador 2"
+                    },
+                    {
+                        "username": "user3",
+                        "name": "Utilizador 3"
+                    }
+                ]
+            }
+        }
+
++ Response 200 (application/json)
+    
+        {
+            "read": {
+                "type": "custom",
+                "expression": "logged",
+                "name": "Utilizadores autenticados",
+                "links": [
+                    {
+                        "username": "user1",
+                        "name": "Utilizador 1"
+                    }
+                ]
+            },
+            "write": {
+                "type": "user",
+                "expression": "U(user2,user3)",
+                "name": "user2, user3",
+                "links": [
+                    {
+                        "username": "user2",
+                        "name": "Utilizador 2"
+                    },
+                    {
+                        "username": "user3",
+                        "name": "Utilizador 3"
+                    }
+                ]
+            }
+        }
+
++ Response 403
+
+# User Root Directory [/directory]
+
+## Get all files and folders for current user [GET]
+
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "id": 1,
+                "name": "Utilizador 1 (user1)",
+                "privacy": "shared",
+                "size": 4539021000,
+                "modified": 1403290475000,
+                "created": 1403290300000,
+                "type": "application/vnd.fenixedu.docs.folder",
+                "contextPath": [],
+                "items": [
+                    {
+                        "id": 2,
+                        "name": "Documentos",
+                        "privacy": "shared",
+                        "size": 4539021000,
+                        "modified": 1403290475000,
+                        "created": 1403290300000,
+                        "type": "application/vnd.fenixedu.docs.folder"
+                    },
+                    {
+                        "id": 3,
+                        "name": "fatura.pdf",
+                        "privacy": "custom",
+                        "size": 1232121,
+                        "modified": 1403231792000,
+                        "created": 1403211792000,
+                        "type": "application/pdf"
+                    }
+                ]
+            }
+
+
++ Response 404
+
++ Response 401
+
+
+
+# Directory [/directory/{id}]
+
++ Parameters
+    + id (optional, string, `1`) ... Unique identifier of a folder. If **id** not present then use the user's root repository.
+    
+
+## Get all files and folders [GET]
+
+Retrives all files and folders childs of the folder **id**
+
++ Response 200 (application/json)
+
+        {
+            "id": 10,
+            "name": "Livros",
+            "privacy": "shared",
+            "size": 4539021000,
+            "modified": 1403290475000,
+            "created": 1403290300000,
+            "type": "application/vnd.fenixedu.docs.folder",
+            "contextPath": [
+                { 
+                    "id" : "1",
+                    "name" : "Utilizador 1 (user1)"
+                },
+                {
+                    "id" : "2",
+                    "name" : "Documentos"
+                }
+            ],
+            "items": [
+                {
+                    "id": 5,
+                    "name": "As grandes glorias do sporting.pdf",
+                    "privacy": "custom",
+                    "size": 2485760,
+                    "modified": 1403231792000,
+                    "created": 1403211792000,
+                    "type": "application/pdf"
+                },
+                {
+                    "id": 6,
+                    "name": "Eusébio - Uma lenda.pdf",
+                    "privacy": "custom",
+                    "size": 3485760,
+                    "modified": 1403231792000,
+                    "created": 1403211792000,
+                    "type": "application/pdf"
+                },
+                {
+                    "id": 7,
+                    "name": "Getting Started With AngularJS.pdf",
+                    "privacy": "custom",
+                    "size": 9485760,
+                    "modified": 1403231792000,
+                    "created": 1403211792000,
+                    "type": "application/pdf"
+                },
+                {
+                    "id": 8,
+                    "name": "Os maiores feitos desportivos do Sporting Clube de Portugal.pdf",
+                    "privacy": "custom",
+                    "size": 1048576,
+                    "modified": 1403231792000,
+                    "created": 1403211792000,
+                    "type": "application/pdf"
+                },
+                {
+                    "id": 9,
+                    "name": "As glorias do campeão.pdf",
+                    "privacy": "custom",
+                    "size": 10485760,
+                    "modified": 1403231792000,
+                    "created": 1403211792000,
+                    "type": "application/pdf"
+                }
+            ]
+        }
+
++ Response 401
+
++ Response 403
+
+## File Upload [POST]
+
+Upload file to the folder identified by **id**.
+
++ Parameters
+    + id (string) ... Unique identifier of the folder
+
++ Response 201
+        
++ Response 401
+
+## Create Directory [PUT]
+
+Creates a directory child of **id**.
+
++ Request (application/json)
+    
+        { "name" : "xpto" }
+
++ Response 201 (application/json)
+
+    + Body
+        
+            {
+                "id": 12,
+                "name": "xpto",
+                "size": 1239021,
+                "modified": 1403290475000,
+                "created": 1403290300000,
+                "type": "application/vnd.fenixedu.docs.folder"
+            }
+
++ Response 404
+
++ Response 401
+
+## DELETE
+
+Deletes the folder with the **id**
+
++ Response 204
+
+
+## Directory Extended Details [/directory/{id}/details]
+
+Get folder extended details
+
++ Parameters
+    + id (string) ... Unique identifier of a folder.
+
++ Model
+    + Body
+    
+            {
+                "id": 2,
+                "name": "Documentos",
+                "privacy": "user",
+                "parent": { 
+                            "id" : 1,
+                            "name":"Utilizador 1 (user1)"
+                          },
+                "type": "application/vnd.fenixedu.docs.folder",
+                "sharing": {
+                    "read": {
+                        "expression": "U(username1)",
+                        "name": "username1",
+                        "accessible": true
+                    },
+                    "write": {
+                        "expression": "U(username1) | U(username2)",
+                        "name": "username1, username2",
+                        "accessible": true
+                    }
+                },
+                "size": 1232121,
+                "modified": 1403231792000,
+                "created": 1403211792000,
+            }
+
+
+## GET 
+
++ Response 200
+    [Directory Extended Details][]
+
++ Response 401
+
++ Response 404
+
+## Move Directory [/directory/{id}/move]
++ Parameters
+    + id (string) ... Unique identifier of the folder
+
+## POST
+
++ Request (application/json)
+    
+
+        {
+            "id" : 3
+        }
+
++ Response 401
+
++ Response 404
+
++ Response 200
+
+    [File Extended Details][]
+
+
+## Share Directory [/directory/{id}/share]
+
+Shares a directory with one or more groups.
+
+The Share resource has the following attributes:
+
+- read
+- write
+
+Each attribute defines the access group with the following attributes:
+
+- type  Group type. Possible values `custom` or `user`
+- expression - Group expression. Possible values are  `anyone` or `logged` or `U(user1,user2,user3)`
+- name - presentation name of the group
+- links - list of users that have links to the directory `id`.
+
++ Parameters
+    + id (string) ...  unique id of the file or folder to be shared
+
++ Model (application/json)
+    
+    This model is the JSON representation of the sharing settings for
+
+    + Body
+    
+            {
+                "target" : {
+                            "id": 1,
+                            "name": "Utilizador 1 (user1)",
+                            privacy": "shared",
+                            "size": 4539021000,
+                            "modified": 1403290475000,
+                            "created": 1403290300000,
+                            "type": "application/vnd.fenixedu.docs.folder"
+                            "contextPath": [
+                            ]
+                },
+                "read": {
+                    "type": "custom",
+                    "expression": "logged",
+                    "name": "Utilizadores autenticados",
+                    "links": [
+                        {
+                            "username": "user1",
+                            "name": "Utilizador 1"
+                        }
+                    ]
+                },
+                "write": {
+                    "type": "user",
+                    "expression": "U(user2,user3)",
+                    "name": "user2, user3",
+                    "links": [
+                        {
+                            "username": "user2",
+                            "name": "Utilizador 2"
+                        },
+                        {
+                            "username": "user3",
+                            "name": "Utilizador 3"
+                        }
+                    ]
+                }
+            }
+
+## GET
+    
++ Response 200
+    [Share Directory][]
+
+## POST
+
++ Request (application/json)
+
+        {
+            "read": {
+                "type": "custom",
+                "expression": "logged",
+                "name": "Utilizadores autenticados",
+                "links": [
+                    {
+                        "username": "user1",
+                        "name": "Utilizador 1"
+                    }
+                ]
+            },
+            "write": {
+                "type": "user",
+                "expression": "U(user2,user3)",
+                "name": "user2, user3",
+                "links": [
+                    {
+                        "username": "user2",
+                        "name": "Utilizador 2"
+                    },
+                    {
+                        "username": "user3",
+                        "name": "Utilizador 3"
+                    }
+                ]
+            }
+        }
+
++ Response 200 (application/json)
+    
+        {
+            "read": {
+                "type": "custom",
+                "expression": "logged",
+                "name": "Utilizadores autenticados",
+                "links": [
+                    {
+                        "username": "user1",
+                        "name": "Utilizador 1"
+                    }
+                ]
+            },
+            "write": {
+                "type": "user",
+                "expression": "U(user2,user3)",
+                "name": "user2, user3",
+                "links": [
+                    {
+                        "username": "user2",
+                        "name": "Utilizador 2"
+                    },
+                    {
+                        "username": "user3",
+                        "name": "Utilizador 3"
+                    }
+                ]
+            }
+        }
+
++ Response 403
+
+
+
+
+#Favorites [/favorites]
+
+List of favorites files and folders.
+
+## Retrieve favorites [GET]
+
++ Response 200 (application/json)
+    
+        [
+            {
+                "id": 1,
+                "name": "Documentos",
+                "size": 1239021,
+                "modified": 1403290475000,
+                "created": 1403290300000,
+                "type": "application/vnd.fenixedu.docs.folder"
+            }
+        ]
+
+## Favorite [/favorites/{id}]
+
++ Parameters
+
+    + id (string) ... unique id of the file and folder to add or delete from favorites
+        
+
+## Add to favorites [POST]
+
++ Response 201 (application/json)
+    
+        {
+            "id": 2,
+            "name": "fatura.pdf",
+            "size": 1232121,
+            "modified": 1403231792000,
+            "created": 1403211792000,
+            "type": "application/pdf"
+        }
+
+## Remove from favorite [DELETE]
+
++ Response 204
+
+
+## Events [/events/{id}{?start}{?end}]
+
+List of all events within the interval [**start**, **end**[ for the file or folder **id**
+
++ Parameters
+    
+    + id (optional, string) ... unique id of file or folder to get the events from. If not specified it retrieves the events for the user's repository.
+    + start (optional, date) ... date when to start search. If not present default value is today - 1 month. 
+    + end (optional, date) ... date when to end the search. If not present default value is today.
+    
+
+## All events [GET]
++ Response 200 (application/json)
+
+        { 
+            "id" : 12312,
+            "name" : "Documentos",
+            "events":   [
+                            {
+                                "event_type": "share",
+                                "timestamp": 14032612431000,
+                                "description": "Carl shared a file with monica",
+                                "target" : 12321,
+                                "source" : 12321
+                            }
+                        ]
+        }
+
+
+## Versions [/versions/{id}]
+
+Lists all versions of the file identified by **id**
+
+
+## GET
+
++ Response 200 (application/json)
+
+        [ 
+            {
+                "number" : 1,
+                "username" : "user2",
+                "timestamp" : 1231213122000,
+                "versionId" : 12312312321
+            },
+            {
+                "number" : 2,
+                "username" : "user2",
+                "timestamp" : 1231213138000,
+                "versionId" : 435345345423
+            }
+        ]
+
+# Quota [/quota]
+
+Returns the occupied space and the total allowed space (in bytes)
+
+## occupied and maximum space [GET]
+
++ Response 200 (application/json)
+    
+    + Body    
+        
+            {
+                "occupied" : 898105344,
+                "maximum" : 2147483648
+            }
+
++ Response 401

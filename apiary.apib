@@ -926,38 +926,78 @@ List of shared files and folders.
 
 + Response 401
 
-## Events [/events/{id}{?start}{?end}]
+#Repositories [/repositories]
 
-List of all events within the interval [**start**, **end**[ for the file or folder **id**
+List of repositories.
 
-+ Parameters
-    
-    + id (optional, string) ... unique id of file or folder to get the events from. If not specified it retrieves the events of the user's repository.
-    + start (optional, date) ... date when to start search. If not present default value is today - 1 month. 
-    + end (optional, date) ... date when to end the search. If not present default value is today.
-    
+## Retrieve repositories [GET]
 
-## All events [GET]
 + Response 200 (application/json)
-
-        { 
-            "id" : 12312,
-            "name" : "Documentos",
-            "events":   [
-                            {
-                                "event_type": "share",
-                                "timestamp": 14032612431000,
-                                "description": "Carl shared a file with monica",
-                                "target" : 12321,
-                                "source" : 12321
-                            }
-                        ]
-        }
-
-+ Response 404
+    
+        [
+          {
+            "id": "115964121197",
+            "name": "Instituto Superior TÃ©cnico",
+            "size": 0,
+            "created": 1406670046000,
+            "modified": 1406670046000,
+            "privacy": "shared",
+            "permission": "write",
+            "type": "application/vnd.fenixedu.docs.repository",
+            "contextPath": [
+              {
+                "id": "115964121197",
+                "name": "Instituto Superior TÃ©cnico"
+              }
+            ],
+            "items": []
+          },
+          {
+            "id": "115964121199",
+            "name": "PÃºblico",
+            "size": 0,
+            "created": 1406670046000,
+            "modified": 1406670046000,
+            "privacy": "public",
+            "permission": "write",
+            "type": "application/vnd.fenixedu.docs.repository",
+            "contextPath": [
+              {
+                "id": "115964121199",
+                "name": "PÃºblico"
+              }
+            ],
+            "items": []
+          }
+        ]
 
 + Response 401
 
+## Retrieve User repositories [/user GET]
+
++ Response 200 (application/json)
+    
+        [
+          {
+            "id": "115964121195",
+            "name": "Sala boss",
+            "size": 0,
+            "created": 1406670046000,
+            "modified": 1406670046000,
+            "privacy": "shared",
+            "permission": "write",
+            "type": "application/vnd.fenixedu.docs.repository",
+            "contextPath": [
+              {
+                "id": "115964121195",
+                "name": "Sala boss"
+              }
+            ],
+            "items": []
+          }
+        ]
+
++ Response 401
 
 ## Versions [/versions/{id}]
 

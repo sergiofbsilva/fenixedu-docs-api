@@ -1046,3 +1046,45 @@ Returns the occupied space and the total allowed space (in bytes)
             }
 
 + Response 404
+
+
+#Language [/bennu-core/profile]
+
+## get profile [GET]
+
++ Response 200 (application/json)
+
+    + Body
+            
+            {
+              "id": "167503724945",
+              "username": "admin",
+              "name": "admin",
+              "givenNames": "admin",
+              "familyNames": "admin",
+              "displayName": "admin",
+              "avatar": "http://localhost:8080/api/bennu-core/profile/localavatar/admin",
+              "email": "admin@admin.eu",
+              "preferredLocale": {
+                "tag": "pt-PT",
+                "displayName": "portuguÃªs (Portugal)",
+                "lang": "pt"
+              },
+              "locale": {
+                "tag": "pt-PT",
+                "displayName": "portuguÃªs (Portugal)",
+                "lang": "pt"
+              },
+              "locales": [
+                {
+                  "tag": "pt-PT",
+                  "displayName": "portuguÃªs (Portugal)",
+                  "lang": "pt"
+                },
+                {
+                  "tag": "en-GB",
+                  "displayName": "English (United Kingdom)",
+                  "lang": "en"
+                }
+              ]
+            }
